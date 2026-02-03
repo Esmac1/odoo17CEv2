@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Define the action first -->
+    <record id="action_helpdesk_ticket" model="ir.actions.act_window">
+        <field name="name">Tickets</field>
+        <field name="res_model">helpdesk.ticket</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="context">{'search_default_my_tickets': 1}</field>
+        <field name="help" type="html">
+            <p>Manage your support tickets.</p>
+        </field>
+    </record>
+
+    <!-- Root menu -->
+    <menuitem id="menu_helpdesk_root"
+              name="Helpdesk"
+              sequence="10"/>
+
+    <!-- Tickets menu -->
+    <menuitem id="menu_helpdesk_ticket"
+              name="Tickets"
+              parent="menu_helpdesk_root"
+              action="action_helpdesk_ticket"
+              sequence="1"/>
+</odoo>

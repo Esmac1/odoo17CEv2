@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_payroll_salary_rule_user,payroll.salary.rule.user,model_payroll_salary_rule,base.group_user,1,1,1,1
+access_payroll_structure_user,payroll.structure.user,model_payroll_structure,base.group_user,1,1,1,1
+access_employee_profile_user,employee.profile.user,model_payroll_employee_profile,base.group_user,1,1,1,1
+access_payroll_run_user,payroll.run.user,model_payroll_run,base.group_user,1,1,1,0
+access_payroll_line_user,payroll.line.user,model_payroll_line,base.group_user,1,0,0,0
+access_payroll_rule_line_user,payroll.rule.line.user,model_payroll_rule_line,base.group_user,1,0,0,0
+access_generate_payroll_wizard,generate.payroll.wizard,model_generate_payroll_wizard,base.group_user,1,1,1,1

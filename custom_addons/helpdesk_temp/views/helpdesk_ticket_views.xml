@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- ================= Search View ================= -->
+    <record id="view_helpdesk_ticket_search" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.search</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <search string="Search Tickets">
+                <field name="name"/>
+                <field name="stage_id"/>
+                <field name="team_id"/>
+                <field name="category_id"/>
+                <field name="priority"/>
+                <field name="closed_date"/>
+                
+                <filter name="my_tickets" string="My Tickets" domain="[('assigned_id', '=', uid)]"/>
+                <filter name="high_priority" string="High Priority" domain="[('priority', '=', '3')]"/>
+                <filter name="closed_tickets" string="Closed Tickets" domain="[('stage_id.code', '=', 'closed')]"/>
+                <filter name="open_tickets" string="Open Tickets" domain="[('stage_id.code', 'in', ['new', 'in_progress', 'waiting'])]"/>
+                
+                <group expand="0" string="Group By">
+                    <filter name="group_stage" string="Stage" context="{'group_by': 'stage_id'}"/>
+                    <filter name="group_team" string="Team" context="{'group_by': 'team_id'}"/>
+                    <filter name="group_assigned" string="Assigned To" context="{'group_by': 'assigned_id'}"/>
+                    <filter name="group_priority" string="Priority" context="{'group_by': 'priority'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ================= Tree View ================= -->
+    <record id="view_helpdesk_ticket_tree" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.tree</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <tree decoration-danger="priority == '3'" decoration-success="stage_id.code == 'resolved'" decoration-warning="stage_id.code == 'closed'">
+                <field name="name"/>
+                <field name="stage_id"/>
+                <field name="requester_id"/>
+                <field name="assigned_id"/>
+                <field name="team_id"/>
+                <field name="priority" widget="priority"/>
+                <field name="closed_date"/>
+                <field name="create_date" string="Created Date"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ================= Form View ================= -->
+    <record id="view_helpdesk_ticket_form" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <form string="Helpdesk Ticket">
+                <sheet>
+                    <header>
+                        <field name="stage_id"
+                               widget="statusbar"
+                               statusbar_visible="new,in_progress,waiting,resolved,closed"
+                               options="{'clickable': '1'}"/>
+                    </header>
+
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="requester_id"/>
+                            <field name="assigned_id"/>
+                            <field name="team_id"/>
+                            <field name="category_id"/>
+                            <field name="priority" widget="priority"/>
+                            <field name="tag_ids" widget="many2many_tags"/>
+                            <field name="stage_code" invisible="1"/>
+                        </group>
+                        <group>
+                            <!-- Deadline field removed and Kanban State removed -->
+                            <field name="closed_date" readonly="1"/>
+                            <field name="create_date" string="Created Date" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <!-- Full width description section -->
+                    <div class="row mt-16">
+                        <div class="col-12">
+                            <label for="description" string="Description"/>
+                            <field name="description" nolabel="1" placeholder="Describe the issue in detail..." 
+                                   style="min-height: 200px; width: 100%;" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <notebook>
+                        <page string="SLA &amp; Resolution">
+                            <group>
+                                <group>
+                                    <field name="response_due_date"/>
+                                    <field name="resolution_due_date"/>
+                                </group>
+                            </group>
+                            <!-- Full width resolution notes section -->
+                            <div class="row mt-16">
+                                <div class="col-12">
+                                    <label for="resolution_notes" string="Resolution Notes"/>
+                                    <field name="resolution_notes" nolabel="1" placeholder="Resolution notes..." 
+                                           style="min-height: 150px; width: 100%;" class="form-control"/>
+                                </div>
+                            </div>
+                        </page>
+                        <page string="Additional Info">
+                            <group>
+                                <group>
+                                    <field name="create_uid" string="Created By" readonly="1"/>
+                                    <field name="write_uid" string="Last Updated By" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="create_date" string="Created On" readonly="1"/>
+                                    <field name="write_date" string="Last Updated On" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- FORM VIEW -->
+    <record id="view_payroll_structure_form" model="ir.ui.view">
+        <field name="name">payroll.structure.form</field>
+        <field name="model">payroll.structure</field>
+        <field name="arch" type="xml">
+            <form string="Payroll Structure">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_archive" type="object" class="oe_stat_button" icon="fa-archive"/>
+                        <button name="action_unarchive" type="object" class="oe_stat_button" icon="fa-undo"/>
+                    </div>
+                    
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Structure Name"/>
+                        </h1>
+                        <div class="o_asterisk">
+                            <field name="code" placeholder="Code"/>
+                        </div>
+                    </div>
+                    
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="company_id"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="basic_rule_id"/>
+                            <field name="total_fixed" readonly="1"/>
+                            <field name="total_percentage" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Salary Rules">
+                            <field name="rule_ids" context="{'default_company_id': company_id}">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="rule_type"/>
+                                    <field name="display_amount"/>
+                                    <field name="account_id"/>
+                                    <!-- CRITICAL: Add company_id to satisfy domain -->
+                                    <field name="company_id" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Description">
+                            <field name="description" placeholder="Description of this salary structure..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- TREE VIEW -->
+    <record id="view_payroll_structure_tree" model="ir.ui.view">
+        <field name="name">payroll.structure.tree</field>
+        <field name="model">payroll.structure</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="total_fixed"/>
+                <field name="total_percentage"/>
+                <field name="company_id"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ACTION -->
+    <record id="action_payroll_structure" model="ir.actions.act_window">
+        <field name="name">Salary Structures</field>
+        <field name="res_model">payroll.structure</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

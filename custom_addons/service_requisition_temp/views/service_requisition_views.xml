@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_service_requisition_tree" model="ir.ui.view">
+        <field name="name">service.requisition.tree</field>
+        <field name="model">service.requisition</field>
+        <field name="arch" type="xml">
+            <tree string="Service Requisitions" 
+                  decoration-success="state=='approved'"
+                  decoration-warning="state=='submitted'" 
+                  decoration-danger="state=='rejected'"
+                  default_order="date_request desc">
+                <field name="name" string="Reference"/>
+                <field name="date_request" string="Request Date"/>
+                <field name="requester_id"/>
+                <field name="department_id"/>
+                <field name="service_type"/>
+                <field name="priority" widget="priority"/>
+                <field name="total_estimated_cost" string="Total Cost"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_service_requisition_form" model="ir.ui.view">
+        <field name="name">service.requisition.form</field>
+        <field name="model">service.requisition</field>
+        <field name="arch" type="xml">
+            <form string="Service Requisition">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,approved,rejected" clickable="true"/>
+                    <button name="action_send_message" type="object" string="Send Message" class="btn-secondary" invisible="state == 'draft'"/>
+                    <button name="action_log_activity" type="object" string="Log Activity" class="btn-secondary"/>
+                    <button name="action_attachments" type="object" string="Attachments" class="btn-secondary"/>
+                </header>
+                <sheet>
+                    <!-- Requester Information -->
+                    <group string="Requester Information">
+                        <group>
+                            <field name="requester_id" readonly="1"/>
+                            <field name="department_id"/>
+                            <field name="contact_phone"/>
+                            <field name="contact_email" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="date_request"/>
+                            <field name="name" readonly="1"/>
+                            <field name="approver_id"/>
+                            <field name="is_confidential"/>
+                        </group>
+                    </group>
+
+                    <!-- Service Details -->
+                    <group string="Service Details">
+                        <group>
+                            <field name="service_type" required="1" widget="radio" options="{'horizontal': true}"/>
+                            <field name="priority" required="1" widget="priority"/>
+                            <field name="deadline_date" required="1"/>
+                        </group>
+                        <group>
+                            <field name="preferred_vendor" placeholder="e.g. ABC Consulting Inc."/>
+                            <field name="vendor_contact" placeholder="Contact person, phone, email"/>
+                        </group>
+                    </group>
+
+                    <!-- Description and Purpose -->
+                    <group string="Service Description" colspan="2">
+                        <label for="description" string="Description"/>
+                        <field name="description" placeholder="Provide a clear, detailed description of the service required..." nolabel="1" colspan="2" style="min-height: 80px;"/>
+                    </group>
+
+                    <group string="Purpose/Justification" colspan="2">
+                        <label for="purpose" string="Purpose"/>
+                        <field name="purpose" placeholder="Explain the purpose and justification for this service request..." nolabel="1" colspan="2" style="min-height: 80px;"/>
+                    </group>
+
+                    <!-- Service Items -->
+                    <group string="Service Items" colspan="2">
+                        <field name="line_ids" colspan="2">
+                            <tree editable="bottom" string="Service Items" create="1" delete="1">
+                                <field name="description" widget="text" style="width: 400px;" placeholder="Item description..." required="1"/>
+                                <field name="quantity" required="1" class="oe_number"/>
+                                <field name="unit_cost" required="1" class="oe_number"/>
+                                <field name="subtotal" readonly="1" class="oe_number"/>
+                            </tree>
+                        </field>
+                    </group>
+
+                    <!-- Financial Summary -->
+                    <group string="Financial Summary">
+                        <group>
+                            <field name="total_estimated_cost" readonly="1" nolabel="1" class="oe_subtotal_footer_separator"/>
+                        </group>
+                    </group>
+
+                    <!-- Rejection Reason (visible only when rejected) -->
+                    <group string="Rejection Details" colspan="2" invisible="state != 'rejected'">
+                        <field name="rejection_reason" readonly="1" nolabel="1" style="min-height: 60px; background-color: #f8f9fa; padding: 8px; border-radius: 4px;"/>
+                    </group>
+                </sheet>
+
+                <!-- Chatter -->
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+
+                <!-- Buttons -->
+                <footer>
+                    <button name="action_submit" string="Submit for Approval" type="object" 
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Approve" type="object" 
+                            class="btn-success" invisible="state != 'submitted'"/>
+                    <button name="action_reject" string="Reject" type="object" 
+                            class="btn-danger" invisible="state != 'submitted'"/>
+                    <button name="action_draft" string="Reset to Draft" type="object" 
+                            class="btn-secondary" invisible="state == 'draft'"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_service_requisition_search" model="ir.ui.view">
+        <field name="name">service.requisition.search</field>
+        <field name="model">service.requisition</field>
+        <field name="arch" type="xml">
+            <search string="Search Service Requisitions">
+                <field name="name" string="Reference"/>
+                <field name="requester_id"/>
+                <field name="service_type"/>
+                <field name="priority"/>
+                <field name="preferred_vendor"/>
+                <filter name="draft" string="Draft" domain="[('state','=','draft')]"/>
+                <filter name="submitted" string="To Approve" domain="[('state','=','submitted')]"/>
+                <filter name="approved" string="Approved" domain="[('state','=','approved')]"/>
+                <filter name="rejected" string="Rejected" domain="[('state','=','rejected')]"/>
+                <filter name="my_requests" string="My Requests" domain="[('requester_id','=',uid)]"/>
+                <filter name="to_approve" string="To Approve" domain="[('state','=','submitted'),('approver_id','=',uid)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_state" string="State" context="{'group_by': 'state'}"/>
+                    <filter name="group_by_department" string="Department" context="{'group_by': 'department_id'}"/>
+                    <filter name="group_by_service_type" string="Service Type" context="{'group_by': 'service_type'}"/>
+                    <filter name="group_by_priority" string="Priority" context="{'group_by': 'priority'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_service_requisition" model="ir.actions.act_window">
+        <field name="name">Service Requisitions</field>
+        <field name="res_model">service.requisition</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_my_requests': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new service requisition
+            </p>
+        </field>
+    </record>
+</odoo>

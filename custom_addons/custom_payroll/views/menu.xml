@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ROOT MENU -->
+    <menuitem
+        id="menu_payroll_root" groups="base.group_user"
+        name="Payroll"
+        sequence="50"
+        web_icon="custom_payroll,static/description/icon.png"
+    />
+
+    <!-- CONFIGURATION -->
+    <menuitem
+        id="menu_payroll_configuration"
+        name="Configuration"
+        parent="menu_payroll_root"
+        sequence="10"
+    />
+
+    <!-- EMPLOYEES -->
+    <menuitem
+        id="menu_payroll_employee"
+        name="Employees"
+        parent="menu_payroll_root"
+        sequence="20"
+    />
+
+    <!-- SALARY RULES -->
+    <menuitem
+        id="menu_salary_rules"
+        name="Salary Rules"
+        parent="menu_payroll_configuration"
+        action="action_salary_rule"
+        sequence="10"
+    />
+
+    <!-- SALARY STRUCTURES -->
+    <menuitem
+        id="menu_payroll_structures"
+        name="Salary Structures"
+        parent="menu_payroll_configuration"
+        action="action_payroll_structure"
+        sequence="20"
+    />
+
+    <!-- EMPLOYEE PROFILES -->
+    <menuitem
+        id="menu_employee_profiles"
+        name="Employee Profiles"
+        parent="menu_payroll_employee"
+        action="action_employee_profile"
+        sequence="10"
+    />
+
+    <!-- PROCESSING -->
+    <menuitem
+        id="menu_payroll_processing"
+        name="Payroll Processing"
+        parent="menu_payroll_root"
+        sequence="30"
+    />
+
+    <!-- PAYROLL RUNS -->
+    <menuitem
+        id="menu_payroll_runs"
+        name="Payroll Runs"
+        parent="menu_payroll_processing"
+        action="action_payroll_run"
+        sequence="10"
+    />
+
+    <!-- REPORTS -->
+    <menuitem
+        id="menu_payroll_reports"
+        name="Reports"
+        parent="menu_payroll_root"
+        sequence="40"
+    />
+
+</odoo>

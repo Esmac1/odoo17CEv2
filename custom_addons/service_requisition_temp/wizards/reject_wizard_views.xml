@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_service_requisition_reject_wizard_form" model="ir.ui.view">
+        <field name="name">service.requisition.reject.wizard.form</field>
+        <field name="model">service.requisition.reject.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Reject Service Requisition">
+                <sheet>
+                    <group>
+                        <field name="requisition_id" invisible="1"/>
+                        <label for="rejection_reason" string="Please provide a reason for rejection:"/>
+                        <field name="rejection_reason" placeholder="Enter the reason for rejecting this service requisition..." nolabel="1" style="min-height: 100px;" colspan="2"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_reject" string="Reject" type="object" class="btn-danger"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

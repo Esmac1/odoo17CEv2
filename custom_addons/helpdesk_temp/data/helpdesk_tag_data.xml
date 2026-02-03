@@ -1,0 +1,14 @@
+<odoo>
+    <record id="tag_bug" model="helpdesk.tag">
+        <field name="name">Bug</field>
+        <field name="color">1</field>
+    </record>
+    <record id="tag_feature" model="helpdesk.tag">
+        <field name="name">Feature</field>
+        <field name="color">2</field>
+    </record>
+    <record id="tag_support" model="helpdesk.tag">
+        <field name="name">Support</field>
+        <field name="color">3</field>
+    </record>
+</odoo>

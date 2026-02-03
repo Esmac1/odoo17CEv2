@@ -1,0 +1,7 @@
+<odoo>
+    <record id="model_helpdesk_tag" model="ir.model">
+        <field name="name">Helpdesk Tag</field>
+        <field name="model">helpdesk.tag</field>
+        <field name="state">base</field>
+    </record>
+</odoo>

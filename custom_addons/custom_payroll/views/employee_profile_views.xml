@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- TREE VIEW -->
+    <record id="view_employee_profile_tree" model="ir.ui.view">
+        <field name="name">payroll.employee.profile.tree</field>
+        <field name="model">payroll.employee.profile</field>
+        <field name="arch" type="xml">
+            <tree string="Employee Payroll Profiles">
+                <field name="employee_id" widget="many2one_avatar_employee"/>
+                <field name="employee_name"/>
+                <field name="job_title"/>
+                <field name="department_id"/>
+                <field name="structure_id"/>
+                <field name="basic_salary" widget="monetary"/>
+                <field name="net_salary" widget="monetary"/>
+                <field name="active" widget="boolean_button"/>
+            </tree>
+        </field>
+    </record>
+    
+    <!-- FORM VIEW - No attrs in header -->
+    <record id="view_employee_profile_form" model="ir.ui.view">
+        <field name="name">payroll.employee.profile.form</field>
+        <field name="model">payroll.employee.profile</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_employee" type="object" class="oe_stat_button" icon="fa-user"/>
+                        <button name="action_archive" type="object" class="oe_stat_button" icon="fa-archive"/>
+                        <button name="action_unarchive" type="object" class="oe_stat_button" icon="fa-undo"/>
+                    </div>
+                    
+                    <div class="oe_title">
+                        <h1>
+                            <field name="employee_id" widget="many2one_avatar_employee"/>
+                        </h1>
+                        <div class="o_asterisk">
+                            <field name="employee_name" readonly="1"/>
+                        </div>
+                    </div>
+                    
+                    <notebook>
+                        <page string="Salary Information">
+                            <group>
+                                <group>
+                                    <field name="employee_id"/>
+                                    <field name="job_title" readonly="1"/>
+                                    <field name="department_id" readonly="1"/>
+                                    <field name="company_id" widget="res_company"/>
+                                </group>
+                                <group>
+                                    <field name="structure_id"/>
+                                    <field name="basic_salary" widget="monetary"/>
+                                </group>
+                            </group>
+                            
+                            <group string="Salary Breakdown">
+                                <group>
+                                    <field name="gross_salary" widget="monetary" readonly="1"/>
+                                    <field name="total_allowances" widget="monetary" readonly="1"/>
+                                    <field name="total_deductions" widget="monetary" readonly="1"/>
+                                    <field name="net_salary" widget="monetary" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <page string="Payment Details">
+                            <group>
+                                <group>
+                                    <field name="bank_name"/>
+                                    <field name="bank_account_number"/>
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <page string="Nigerian Information">
+                            <group>
+                                <group>
+                                    <field name="tax_identification_number"/>
+                                    <field name="pension_number"/>
+                                    <field name="nhf_number"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- SEARCH VIEW -->
+    <record id="view_employee_profile_search" model="ir.ui.view">
+        <field name="name">payroll.employee.profile.search</field>
+        <field name="model">payroll.employee.profile</field>
+        <field name="arch" type="xml">
+            <search string="Search Employee Profiles">
+                <field name="employee_id"/>
+                <field name="employee_name"/>
+                <field name="structure_id"/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <separator/>
+                <filter string="No Bank Account" name="no_bank" domain="[('bank_account_number', '=', False)]"/>
+                <filter string="No TIN" name="no_tin" domain="[('tax_identification_number', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Department" name="group_department" context="{'group_by': 'department_id'}"/>
+                    <filter string="Structure" name="group_structure" context="{'group_by': 'structure_id'}"/>
+                    <filter string="Company" name="group_company" context="{'group_by': 'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <!-- ACTION -->
+    <record id="action_employee_profile" model="ir.actions.act_window">
+        <field name="name">Employee Payroll Profiles</field>
+        <field name="res_model">payroll.employee.profile</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_employee_profile_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create payroll profiles for employees to link them to salary structures.
+            </p>
+        </field>
+    </record>
+</odoo>

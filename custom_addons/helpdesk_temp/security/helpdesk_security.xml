@@ -1,0 +1,13 @@
+<odoo>
+    <!-- Restrict tickets so users see only those they requested OR are assigned to -->
+    <record id="helpdesk_ticket_rule_custom" model="ir.rule">
+        <field name="name">Helpdesk Ticket Access</field>
+        <field name="model_id" ref="model_helpdesk_ticket"/>
+        <field name="domain_force">[
+            '|',
+                ('requester_id', '=', user.partner_id.id),
+                ('assigned_id', '=', user.id)
+        ]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+</odoo>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_service_requisition_root" name="Services" sequence="50"/>
+    <menuitem id="menu_service_requisition_main" name="Service Requisition" 
+              parent="menu_service_requisition_root" sequence="10"/>
+    <menuitem id="menu_service_requisition" name="Service Requisitions" 
+              parent="menu_service_requisition_main" 
+              action="action_service_requisition" sequence="10"/>
+</odoo>

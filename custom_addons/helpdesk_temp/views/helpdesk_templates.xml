@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Portal Templates -->
+    <template id="portal_helpdesk_ticket" name="Helpdesk Ticket Portal">
+        <t t-call="portal.portal_layout">
+            <!-- Portal view for customers to see their tickets -->
+        </t>
+    </template>
+</odoo>

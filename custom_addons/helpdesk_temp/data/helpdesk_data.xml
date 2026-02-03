@@ -1,0 +1,10 @@
+<odoo>
+    <record id="ticket_demo_1" model="helpdesk.ticket">
+        <field name="name">Cannot login</field>
+        <field name="requester_id" ref="base.partner_admin"/>
+        <field name="assigned_id" ref="base.user_root"/>
+        <field name="priority">2</field>
+        <field name="stage_id" ref="helpdesk_stage_new"/>
+        <field name="description">User reports login issues since yesterday.</field>
+    </record>
+</odoo>

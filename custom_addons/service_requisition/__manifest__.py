@@ -13,14 +13,13 @@
     'depends': ['base', 'mail', 'hr'],
     'data': [
         'security/ir.model.access.csv',
-        'security/record_rules.xml',           # NEW - critical for approver access
         'data/sequence_data.xml',
         'wizards/reject_wizard_views.xml',
         'views/service_requisition_views.xml',
         'views/service_requisition_menu.xml',
     ],
+    'demo': [],
     'installable': True,
     'application': True,
     'auto_install': False,
-    'license': 'LGPL-3',
 }

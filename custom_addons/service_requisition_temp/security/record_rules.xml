@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Requester can fully manage their own requisitions -->
+    <record id="rule_requester_own" model="ir.rule">
+        <field name="name">Service Requisition: Requester Own</field>
+        <field name="model_id" ref="model_service_requisition"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('requester_id', '=', user.id)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Approver can write (approve/reject) only when state = submitted and assigned -->
+    <record id="rule_approver_submitted" model="ir.rule">
+        <field name="name">Service Requisition: Approver can write submitted</field>
+        <field name="model_id" ref="model_service_requisition"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('state', '=', 'submitted'), ('approver_id', '=', user.id)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Everyone can read approved / rejected records -->
+    <record id="rule_read_approved_rejected" model="ir.rule">
+        <field name="name">Service Requisition: Read approved/rejected</field>
+        <field name="model_id" ref="model_service_requisition"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('state', 'in', ('approved','rejected'))]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+</odoo>

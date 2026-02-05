@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- Requester can fully manage their own requisitions -->
-    <record id="rule_requester_own" model="ir.rule">
+    <!-- 1. Admin / Manager group has FULL access (no restrictions) -->
+    <record id="rule_service_requisition_admin" model="ir.rule">
+        <field name="name">Service Requisition: Admin Full Access</field>
+        <field name="model_id" ref="model_service_requisition"/>
+        <field name="groups" eval="[(4, ref('base.group_erp_manager'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>  <!-- Correct: always true -->
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="global" eval="True"/>
+    </record>
+
+    <!-- 2. Requester can manage their own requisitions -->
+    <record id="rule_service_requisition_requester" model="ir.rule">
         <field name="name">Service Requisition: Requester Own</field>
         <field name="model_id" ref="model_service_requisition"/>
         <field name="groups" eval="[(4, ref('base.group_user'))]"/>
@@ -13,8 +26,8 @@
         <field name="perm_unlink" eval="False"/>
     </record>
 
-    <!-- Approver can write (approve/reject) only when state = submitted and assigned -->
-    <record id="rule_approver_submitted" model="ir.rule">
+    <!-- 3. Approver can manage requisitions assigned to them when submitted -->
+    <record id="rule_service_requisition_approver" model="ir.rule">
         <field name="name">Service Requisition: Approver can write submitted</field>
         <field name="model_id" ref="model_service_requisition"/>
         <field name="groups" eval="[(4, ref('base.group_user'))]"/>
@@ -25,8 +38,8 @@
         <field name="perm_unlink" eval="False"/>
     </record>
 
-    <!-- Everyone can read approved / rejected records -->
-    <record id="rule_read_approved_rejected" model="ir.rule">
+    <!-- 4. Everyone can read approved / rejected records -->
+    <record id="rule_service_requisition_read_all" model="ir.rule">
         <field name="name">Service Requisition: Read approved/rejected</field>
         <field name="model_id" ref="model_service_requisition"/>
         <field name="groups" eval="[(4, ref('base.group_user'))]"/>

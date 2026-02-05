@@ -30,28 +30,37 @@
         <field name="arch" type="xml">
             <form string="Service Requisition">
                 <header>
+                    <!-- Submit button: visible to anyone in draft state -->
                     <button name="action_submit"
                             string="Submit for Approval"
                             type="object"
                             class="oe_highlight btn-primary"
                             invisible="state != 'draft'"/>
+
+                    <!-- Approve button: ONLY visible to the assigned approver when submitted -->
                     <button name="action_approve"
                             string="Approve"
                             type="object"
                             class="oe_highlight btn-success"
-                            invisible="state != 'submitted'"/>
+                            invisible="state != 'submitted' or approver_id != uid"/>
+
+                    <!-- Reject button: ONLY visible to the assigned approver when submitted -->
                     <button name="action_reject"
                             string="Reject"
                             type="object"
                             class="oe_highlight btn-danger"
-                            invisible="state != 'submitted'"/>
+                            invisible="state != 'submitted' or approver_id != uid"/>
+
+                    <!-- Reset to Draft: visible to requester or approver -->
                     <button name="action_draft"
                             string="Reset to Draft"
                             type="object"
                             class="btn-secondary"
                             invisible="state == 'draft'"/>
+
                     <field name="state" widget="statusbar" statusbar_visible="draft,submitted,approved,rejected" clickable="true"/>
                 </header>
+
                 <sheet>
                     <div class="oe_title">
                         <h1>
@@ -112,6 +121,7 @@
                         </group>
                     </group>
 
+                    <!-- Approval Details - visible after approval or rejection -->
                     <group string="Approval Details" colspan="2" invisible="state in ('draft', 'submitted')">
                         <group>
                             <field name="approver_id" readonly="1"/>
@@ -122,6 +132,7 @@
                         </group>
                     </group>
 
+                    <!-- Rejection Details - only visible when rejected -->
                     <group string="Rejection Details" colspan="2" invisible="state != 'rejected'">
                         <field name="rejection_reason" readonly="1" nolabel="1" style="min-height: 60px; background-color: #f8f9fa; padding: 8px; border-radius: 4px;"/>
                     </group>
